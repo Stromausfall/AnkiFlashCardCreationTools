@@ -1,5 +1,6 @@
 from ankiflashcardcreationtools.Card import Card
-from ankiflashcardcreationtools.CardTools import createCSVFile
+from ankiflashcardcreationtools.CardTools import createCSVFile,\
+    createSanitizedCard
 from bs4.element import NavigableString
 from ankiflashcardcreationtools.CrawlTools import ContentRetrieverUsingSelenium,\
     getUniqueContentInEnvironment
@@ -37,7 +38,7 @@ def addTourCards(cards, browser):
                 break
                 
             cardTitle = getUniqueContentInEnvironment(content, environmentTag)
-            card = Card(cardCategory, cardTitle, actualUrl)
+            card = createSanitizedCard(cardCategory, cardTitle, actualUrl)
             cards.append(card)
             print("finished Tour card #" + str(index))
             index += 1    
@@ -57,8 +58,7 @@ def createGeneralCards(cards, browser, environmentTags, url, cardCategory):
                 if isinstance(content, NavigableString):
                     cardTitle = cardTitle + content 
             
-            #cardTitle = environment.contents[0]
-            card = Card(cardCategory, cardTitle, cardLink)
+            card = createSanitizedCard(cardCategory, cardTitle, cardLink)
             cards.append(card)
             
     postSize = len(cards)
