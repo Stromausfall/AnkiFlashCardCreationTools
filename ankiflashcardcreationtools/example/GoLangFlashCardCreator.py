@@ -1,9 +1,7 @@
-from ankiflashcardcreationtools.Card import Card
 from ankiflashcardcreationtools.CardTools import createCSVFile,\
     createSanitizedCard
-from bs4.element import NavigableString
 from ankiflashcardcreationtools.CrawlTools import ContentRetrieverUsingSelenium,\
-    getUniqueContentInEnvironment
+    getUniqueContentInEnvironment, mergeStringContent
 
 def getTourURLs(browser):
     tourBaseUrl = 'http://tour.golang.org'
@@ -53,11 +51,7 @@ def createGeneralCards(cards, browser, environmentTags, url, cardCategory):
             linkId = environment.attrs['id']
             cardLink = url + '#' + linkId
             
-            cardTitle = ''
-            for content in environment.contents:
-                if isinstance(content, NavigableString):
-                    cardTitle = cardTitle + content 
-            
+            cardTitle = mergeStringContent(environment)
             card = createSanitizedCard(cardCategory, cardTitle, cardLink)
             cards.append(card)
             
@@ -83,4 +77,4 @@ if __name__ == '__main__':
     finally:
         browser.close()
         
-    createCSVFile("cards", cards)
+    createCSVFile("golang", cards)

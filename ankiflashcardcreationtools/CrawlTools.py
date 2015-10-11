@@ -26,6 +26,14 @@ class ContentRetrieverUsingSelenium:
     def close(self):
         self.browser.close()
 
+def mergeStringContent(element):
+    value = ''
+    for content in element.contents:
+        if isinstance(content, NavigableString):
+            value = value + content
+    
+    return value 
+
 def getUniqueContentInEnvironment(content, environmentTag):
     '''
     searches the environment and returns its string content - it is expected
